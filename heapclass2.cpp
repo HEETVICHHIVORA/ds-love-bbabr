@@ -1,4 +1,4 @@
-#include<iostream>
+ #include<iostream>
 #include<queue>
 #include<climits>
 
@@ -70,17 +70,63 @@ void preorder(Node* root,int &count){
     preorder(root->left,count);
 
 }
-// void preorder(Node *root)
-// {
-//   if (root == NULL)
-//   {
-//     return;
-//   }
-//   // n l r
-//   cout << root->data << " ";
-//   preorder(root->left);
-//   preorder(root->right);
-// }
+void storeinorder(Node* root,vector<int>in){
+    if(root==NULL){
+       return ;
+    }
+    storeinorder(root->left,in);
+    in.push_back(root->data);
+    storeinorder(root->right,in);
+}
+void replace(Node*root,vector<int>in,int index){
+    if(root==NULL){
+        return;
+    }
+    replace(root->left,in,index);
+    replace(root->right,in,index);
+    root->data = in[index];
+    index++;
+}
+void InsertinBst(Node *&root, int data)
+{
+    // 1st element che !
+    if (root == NULL)
+    {
+        root = new Node(data);
+        return;
+    }
+    else
+    {
+        if (data > root->data)
+        {
+            InsertinBst(root->right, data);
+        }
+        else
+        {
+            InsertinBst(root->left, data);
+        }
+    }
+}
+
+void createBst(Node *&root)
+{
+    cout << "Enter Data : " << endl;
+    int x;
+    cin >> x;
+
+    while (x != -1)
+    {
+        InsertinBst(root, x);
+        cin >> x;
+    }
+}
+Node* converttobst(Node* root){
+    vector<int> inorder;
+    storeinorder(root,inorder);
+    int index = 0;
+    replace(root,inorder,index);
+    return root ;
+}
 void counter(Node*root ,int &count,int count2){
     if(root==NULL && count2>0){
          count++ ;
@@ -128,33 +174,64 @@ int kthbig(int arr[],int k ){
     int ans = pq.top();
     return ans ;
 }
-pair<int,bool> maxi(Node* root){
-    pair<int ,bool>a;
-    if(root==NULL){
-        
+void BFStraversal(Node *root)
+{
+    queue<Node *> q;
+    q.push(root);
+    q.push(NULL);
+
+    while (!q.empty())
+    {
+        Node *front = q.front();
+        q.pop();
+
+        if (front == NULL)
+        {
+            cout << endl;
+            if (!q.empty())
+            {
+                q.push(NULL);
+            }
+        }
+        else
+        {
+            cout << front->data << " ";
+
+            if (front->left != NULL)
+            {
+                q.push(front->left);
+            }
+            if (front->right != NULL)
+            {
+                q.push(front->right);
+            }
+        }
     }
 }
-//solve lc 958 ->
+//solve lc 958 -> 
 int main (){
     // int arr[]={3,5,4,6,9,8,7};
     // int k = 3;
     // cout<<ksmall(arr,k)<<endl;
 
     // cout<<kthbig(arr,k)<<endl;
-    Node* root = create();
-    int count = 0;
-    preorder(root,count);
-     int count2=0;
+//     Node* root = create();
+//     int count = 0;
+//     preorder(root,count);
+//      int count2=0;
      
-    cout<<count<<endl;
-    counter(root,count2,count);
-   cout<<count2<<endl;
-
-    return 0;
+//     cout<<count<<endl;
+//     counter(root,count2,count);
+//    cout<<count2<<endl;
+Node* root = NULL;
+createBst(root);
+BFStraversal(root);
+     return 0;
 }
 //pq.push(k);
 //pq.top();
 //pq.empty();
-//min heap -> priority_queue<int,vector<int>,greater<int> pq ;
+//min heap ->  priority_queue<int,vector<int>,greater<int> pq ;
 
 
+ 
