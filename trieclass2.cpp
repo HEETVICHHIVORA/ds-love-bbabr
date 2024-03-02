@@ -1,4 +1,5 @@
 #include<iostream>
+#include<vector>
 using namespace std ;
 class tnode {
     public :
@@ -70,24 +71,36 @@ void deleteword(tnode* root ,string word ){
    
 
 }
+void findpre(tnode* root,string input,vector<string>& ans){
+        
+
+}
 
 int main (){
       tnode * root = new tnode ('-');
-insert(root, "paras");
-insert(root, "param");
-insert(root, "saas"); 
-insert(root, "pras");
-insert(root, "veet");
-insert(root, "vt");
-insert(root, "heet");
-insert(root, "oeet");
-insert(root, "oat");
+insert(root, "cater");
+insert(root, "care");
+insert(root, "con"); 
+insert(root, "lover");
+insert(root, "loved");
+insert(root, "load");
+insert(root, "lov");
+insert(root, "bat");
+insert(root, "cat");
+insert(root, "car");
 cout<<"done inserting"<<endl;
-// deleteword(root,"cater");
-// if(search(root,"cater")){
-//     cout<<"yes"<<endl;
-// }
-// else{
-//     cout<<"no"<<endl;
-// }
+string input = "c";
+vector<string> ans ;
+findpre(root,input,ans);
+for(auto i: ans){
+    cout<<i<<" ";
+}
+cout<<endl;
+deleteword(root,"cater");
+if(search(root,"cater")){
+    cout<<"yes"<<endl;
+}
+else{
+    cout<<"no"<<endl;
+}
 }

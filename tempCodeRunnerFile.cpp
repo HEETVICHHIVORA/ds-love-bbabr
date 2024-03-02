@@ -1,1 +1,15 @@
-10 20 40 -1 -1 50 70 110 -1  -1 111 -1 -1 80 -1 -1 30 -1 60 -1 90 112 -1 -1 113 -1 -1
+insert(root, "care");
+// insert(root, "con"); 
+// insert(root, "lover");
+// insert(root, "Loved");
+// insert(root, "Load");
+// insert(root, "lov");
+// insert(root, "bat");
+// insert(root, "cat");
+// insert(root, "car");
+// if(search(root,"cater")){
+//     cout<<"yes"<<endl;
+// }
+// else{
+//     cout<<"no"<<endl;
+// }
