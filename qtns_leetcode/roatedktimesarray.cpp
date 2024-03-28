@@ -28,3 +28,37 @@ for (int i = 0; i < n; i++) {
 nums = ans; // Update nums with the rotated elements
     }
 };
+
+
+
+// approach best 
+
+
+class Solution {
+public:
+    // Function to reverse a subarray of nums from index low to high
+    void reverse(vector<int> &nums, int low, int high) {
+        while (low < high) {
+            // Swap elements at low and high indices
+            swap(nums[low], nums[high]);
+            // Move low index forward and high index backward
+            low++;
+            high--;
+        }
+    }
+
+    // Function to rotate the elements of nums to the right by k positions
+    void rotate(vector<int>& nums, int k) {
+        int n = nums.size(); // Get the size of the nums vector
+        k%=n;
+        // Step 1: Reverse the first n-k elements
+        reverse(nums, 0, n - k - 1);
+
+        // Step 2: Reverse the last k elements
+        reverse(nums, n - k, n - 1);
+
+        // Step 3: Reverse the entire array
+        reverse(nums, 0, n - 1);
+    }
+};
+
