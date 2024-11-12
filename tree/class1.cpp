@@ -33,13 +33,14 @@ void preorder(Node *root)
   {
     return;
   }
-  // n l r
+  //nlr
   cout << root->data << " ";
   preorder(root->left);
   preorder(root->right);
 }
 void inorder(Node *root)
 {
+  //lnr
   if (root == NULL)
   {
     return;
@@ -50,6 +51,7 @@ void inorder(Node *root)
 }
 void post(Node *root)
 {
+  //lrn
   if (root == NULL)
   {
     return;
@@ -86,6 +88,42 @@ void leveltrav(Node *root)
     }
   }
 }
+// leetcode 104 (12/11/2024)
+
+// int maxDepth(TreeNode* root) {
+//         if(root==NULL) return 0 ;
+//         return 1+ max(maxDepth(root->left),maxDepth(root->right));
+// }
+
+// leetcode 543 (12/11/2024)
+
+// class Solution {
+// public:
+// int maxDepth(TreeNode* root) {
+//         if(root==NULL){
+//             return 0;
+//         }
+    
+//         int lheight = maxDepth(root->left);
+//         int rheight = maxDepth(root->right);
+//         int ans  = max(lheight,rheight);
+//         ans ++ ;
+//         return ans ;
+// }
+//     int diameterOfBinaryTree(TreeNode* root) {
+//         if(root==NULL){
+//             return 0;
+//         }
+//       int  ans = 0;
+//         int lheight = diameterOfBinaryTree(root->left);
+//         int rheight = diameterOfBinaryTree(root->right);
+//         int mix =maxDepth(root->left)+maxDepth(root->right);
+//         ans = max(lheight,max(mix,rheight));
+//         return ans ;
+//     }
+// };
+
+
 int main()
 {
   Node *root = create();
