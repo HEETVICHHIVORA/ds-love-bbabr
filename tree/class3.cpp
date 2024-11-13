@@ -205,3 +205,44 @@ int  main()
     
 }
 
+
+
+// gfg boundary traversal 
+
+// class Solution {
+//   public:
+//     void printLeftBoundary(Node* root,vector<int>&ans){
+//         if(!root) return ;
+//         if(root->left==NULL && root->right==NULL) return ;
+//         ans.push_back(root->data);
+//         if(root->left) printLeftBoundary(root->left,ans);
+//         else printLeftBoundary(root->right,ans);
+//     }
+//     void printRightBoundary(Node* root,vector<int>&ans){
+//         if(!root) return ;
+//         if(root->left==NULL && root->right==NULL) return ;
+        
+//         if(root->right) printRightBoundary(root->right,ans);
+//         else printRightBoundary(root->left,ans);
+//         ans.push_back(root->data);
+//     }
+//     void printLeafNodes(Node* root,vector<int>&ans){
+//         if(!root) return ;
+//         if(root->left==NULL && root->right==NULL) {
+//             ans.push_back(root->data);
+//             return ;
+//         }
+//         printLeafNodes(root->left,ans);
+//         printLeafNodes(root->right,ans);
+        
+//     }
+//     vector<int> boundaryTraversal(Node *root) {
+//         vector<int>ans ;
+//         ans.push_back(root->data);
+//         printLeftBoundary(root->left,ans);
+//         printLeafNodes(root->left,ans);
+//         printLeafNodes(root->right,ans);
+//         printRightBoundary(root->right,ans);
+//         return ans ;
+//     }
+// };
