@@ -386,3 +386,24 @@
 //         return findthetime(targetNode,parentToChild);
 //     }
 // };
+
+// //652 find duplicate subtrees in a binary tree
+// class Solution {
+// public:
+//     unordered_map<string,int> mp ;
+//     vector<TreeNode*> ans ;
+//     string encode(TreeNode* root){
+//         if(!root) return "$";
+//         string left = encode(root->left);
+//         string right  = encode(root->right);
+//         string encodedString =to_string(root->val) +","+left+","+right;
+//         if(mp[encodedString]==1) ans.push_back(root);
+//         mp[encodedString] ++;
+//         return encodedString;
+//     }
+//     vector<TreeNode*> findDuplicateSubtrees(TreeNode* root) {
+//         if(!root)return ans ;
+//         encode(root);
+//         return ans ;
+//     }
+// };
