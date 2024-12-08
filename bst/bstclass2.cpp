@@ -125,6 +125,15 @@ Node *deletetarget(Node *root, int target)
     }
     return root;
 }
+Node* bstfromInorder(int inorder[],int s,int e){
+    if(s>e) return NULL;
+    int mid = (s+e)/2;
+    int element  = inorder[mid];
+    Node* root = new Node(element);;
+    root->left=bstfromInorder(inorder,s,mid-1);
+    root->right=bstfromInorder(inorder,mid+1,e);
+    return root;
+}
 int main()
 {
     Node *root = NULL;
@@ -147,3 +156,9 @@ int main()
    
     return 0;
 }
+
+//98 - > validate bst 
+//235- > lowest common ancestor of a bst.
+//230 -> kth smallest in bst
+//653 -> two sum iv - bst input 
+

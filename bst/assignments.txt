@@ -1,0 +1,337 @@
+1 -> inorder successor 
+class Solution {
+  public:
+    // returns the inorder successor of the Node x in BST (rooted at 'root')
+    int inOrderSuccessor(Node *root, Node *x) {
+        // Your code here
+        int ans  =-1;
+        while(root){
+            if(root->data>x->data) ans=root->data,root=root->left;
+            else root=root->right;
+        }
+        return ans ;
+        
+    }
+};
+
+2 -> ulta approach lagao bas successor ka 
+
+Node* findPredecessor(Node* root, Node* p) {
+    // add your logic here
+	Node* ans = NULL;
+	while(root){
+		if(root->data<p->data) ans = root ,root = root->right;
+		else root = root->left;
+	}
+	return ans ;
+	
+}
+
+3 -> bst from preorder 
+class Solution {
+public:
+    TreeNode* solve(int &i,int min,int max,vector<int>& preorder){
+        if(i>=preorder.size())return NULL;
+        TreeNode* root = NULL;
+        if(preorder[i]<max && preorder[i]>min) {
+            root = new TreeNode(preorder[i++]);
+            root->left = solve(i,min,root->val,preorder);
+            root->right = solve(i,root->val,max,preorder);
+        }
+        return root ;
+    }
+    TreeNode* bstFromPreorder(vector<int>& preorder) {
+        int min =INT_MIN,max = INT_MAX;
+        int i =0 ;
+        return solve(i,min,max,preorder);
+    }
+};
+
+4(approach-1) -> brothers from different roots (2sum variant)
+
+class Solution
+{
+public:
+    void buildInOrder(Node* root, vector<int>& inorder) {
+        if (!root) return;
+        buildInOrder(root->left, inorder);
+        inorder.push_back(root->data);
+        buildInOrder(root->right, inorder);
+    }
+
+    void buildRevInOrder(Node* root, vector<int>& revInorder) {
+        if (!root) return;
+        buildRevInOrder(root->right, revInorder);
+        revInorder.push_back(root->data);
+        buildRevInOrder(root->left, revInorder);
+    }
+
+    int countPairs(Node* root1, Node* root2, int x) {
+        if (!root1 || !root2) return 0; 
+        
+        vector<int> inorder;
+        vector<int> reverseInorder;
+
+        buildInOrder(root1, inorder);
+        buildRevInOrder(root2, reverseInorder);
+
+        int ans = 0, i = 0, j = 0;
+
+        while (i < inorder.size() && j < reverseInorder.size()) {
+            int sum = inorder[i] + reverseInorder[j];
+            if (sum < x) {
+                i++; 
+            } else if (sum > x) {
+                j++; 
+            } else {
+                ans++; 
+                i++;
+                j++;
+            }
+        }
+
+        return ans;
+    }
+};
+
+
+4(approach-2) brothers from different roots (2sum variant)
+int countPairs(Node* root1, Node* root2, int x) {
+       
+        int ans = 0;
+        stack<Node*>s1,s2;
+        Node* a =root1;
+        Node* b= root2;
+        while(1){
+            while(a){
+                s1.push(a);
+                a=a->left;
+            }
+            while(b){
+                s2.push(b);
+                b=b->right;
+            }
+            if(s1.empty()||s2.empty()) break;
+            auto atop = s1.top();
+            auto btop = s2.top();
+            int sum = atop->data + btop->data ;
+            if(sum==x){
+                s1.pop();
+                s2.pop();
+                ans++;
+                a=atop->right;
+                b=btop->left;
+            }
+            else if(sum<x){
+                s1.pop();
+                a=atop->right;
+            }
+            else{
+                s2.pop();
+                b=btop->left;
+            }
+        }
+
+        return ans;
+    }
+
+5 -> median (can solve by storing inorder in vector also (easy method ))
+5->  median (morris traversal method)
+
+int findNumberOfNodesByMorrisTraversal(Node* root) {
+        int ans=0;
+        Node* curr =root ;
+        if(!root) return ans ;
+        while(curr){
+            if(curr->left==NULL){
+                ans++;
+                curr=curr->right;
+            }
+            else{
+                Node* pred = curr->left;
+                while(pred->right && pred->right!=curr){
+                    pred=pred->right;
+                }
+                if(pred->right==NULL){
+                    pred->right=curr;
+                    curr=curr->left;
+                }
+                else{
+                    pred->right=NULL;
+                    ans++;
+                    curr=curr->right;
+                }
+            }
+        }
+        return ans;
+}
+
+float findMedianFromMorris(Node* root,int n) {
+        int ans=0;
+        int odd1=(n+1)/2,oddVal=-1;
+        int even1=n/2,even1Val=-1;
+        int even2 = (n/2)+1,even2Val=-1;
+        Node* curr =root ;
+        if(!root) return ans ;
+        while(curr){
+            if(curr->left==NULL){
+                ans++;
+                if(ans==odd1) oddVal=curr->data;
+                if(ans==even1) even1Val=curr->data;
+                if(ans==even2) even2Val=curr->data;
+                curr=curr->right;
+            }
+            else{
+                Node* pred = curr->left;
+                while(pred->right && pred->right!=curr){
+                    pred=pred->right;
+                }
+                if(pred->right==NULL){
+                    pred->right=curr;
+                    curr=curr->left;
+                }
+                else{
+                    pred->right=NULL;
+                    ans++;
+                    if(ans==odd1) oddVal=curr->data;
+                    if(ans==even1) even1Val=curr->data;
+                    if(ans==even2) even2Val=curr->data;
+                    curr=curr->right;
+                }
+            }
+        }
+        return ans&1?oddVal:(even1Val+even2Val)/2.0;
+}
+
+
+
+float findMedian(struct Node *root)
+{
+     int n = findNumberOfNodesByMorrisTraversal(root);
+     return findMedianFromMorris(root,n);
+}
+
+
+6 -> check dead end 
+class Solution {
+public:
+    void buildInOrder(Node* root, vector<int>& inorder) {
+        if (!root) return;
+        buildInOrder(root->left, inorder);
+        inorder.push_back(root->data);
+        buildInOrder(root->right, inorder);
+    }
+
+    bool checkdead(unordered_map<int, int>& mp, Node* root) {
+        if (root == NULL) return false;
+        if (root->left == NULL && root->right == NULL) {
+            if (mp[root->data + 1] && mp[root->data - 1]) return true;
+            return false;
+        }
+        return checkdead(mp, root->left) || checkdead(mp, root->right);
+    }
+
+    bool isDeadEnd(Node* root) {
+        vector<int> inorder;
+        buildInOrder(root, inorder);
+        unordered_map<int, int> mp;
+        mp[0] = 1;
+        for (auto it : inorder) mp[it]++;
+        return checkdead(mp, root);
+    }
+};
+
+
+7 ->Replace every element with the least greater element on its right
+
+
+class Node{
+    public :
+    Node* left;
+    Node* right;
+    int data;
+    Node(int valu){
+        this->data=valu;
+        left=NULL,right=NULL;
+    }
+};
+class Solution{
+    public:
+    Node* inorder(int &succ,int val,Node* root){
+        if(!root) return new Node(val);
+        if(val>=root->data){
+            root->right=inorder(succ,val,root->right);
+        }
+        else{
+            succ = root->data ;
+            root->left=inorder(succ,val,root->left);
+        }
+        return root ;
+    }
+    vector<int> findLeastGreater(vector<int>& arr, int n) {
+        vector<int>ans(arr.size());
+        Node* root=0;
+        for(int i=arr.size()-1;i>=0;i--){
+            int succ =-1;
+            root=inorder(succ,arr[i],root);
+            ans[i]=succ;
+        }
+        return ans ;
+    }
+};
+
+8->preorder to bst check if valid 
+void build(int &i, int max, int min, vector<int>& A) {
+    if (i >= A.size()) return;  
+    if (A[i] < max && A[i] > min) {  
+        int current = A[i];
+        i++;  
+        build(i, current, min, A); 
+        build(i, max, current, A); 
+    }
+}
+
+int Solution::solve(vector<int>& A) {
+    int min = INT_MIN, max = INT_MAX;
+    int i = 0;
+    build(i, max, min, A);
+    return i == A.size();  
+}
+
+9->merge 2 bst 
+class Solution {
+public:
+    vector<int> merge(Node *root1, Node *root2) {
+        vector<int> ans;
+        stack<Node*> s1, s2;
+        Node* a = root1;
+        Node* b = root2;
+
+        while (true) {
+            while (a) {
+                s1.push(a);
+                a = a->left;
+            }
+            while (b) {
+                s2.push(b);
+                b = b->left;
+            }
+            if (s1.empty() && s2.empty()) break;
+
+            if (s2.empty() || (!s1.empty() && s1.top()->data <= s2.top()->data)) {
+                auto atop = s1.top();
+                s1.pop();
+                ans.push_back(atop->data);
+                a = atop->right;
+            } else {
+                auto btop = s2.top();
+                s2.pop();
+                ans.push_back(btop->data);
+                b = btop->right;
+            }
+        }
+
+        return ans;
+    }
+};
+
