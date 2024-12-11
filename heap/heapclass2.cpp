@@ -38,7 +38,7 @@ class info {
         this->isheap=b;
     }
 };
-info check(Node* root){
+info checkifmaxheap(Node* root){
     if(root==NULL){
     info temp(INT_MIN,true) ;
          return temp ;
@@ -47,19 +47,16 @@ info check(Node* root){
         info temp(root->data,true) ;
         return temp ;
     }
-    info lans = check(root->left);
-    info rans = check(root->right);
+    info lans = checkifmaxheap(root->left);
+    info rans = checkifmaxheap(root->right);
     if(root->data>lans.maxval && root->data>rans.maxval && lans.isheap && rans.isheap){
         info ans(root->data,true);
-    return ans ;
-
+        return ans ;
     }
     else{
         info ans (max(root->data,max(lans.maxval,rans.maxval)),false);
         return ans ;
-
     }
-
 };
 void preorder(Node* root,int &count){
     if(root==NULL){
@@ -68,7 +65,6 @@ void preorder(Node* root,int &count){
     count++;
     preorder(root->right,count);
     preorder(root->left,count);
-
 }
 void storeinorder(Node* root,vector<int>in){
     if(root==NULL){
@@ -90,19 +86,16 @@ void replace(Node*root,vector<int>in,int index){
 void InsertinBst(Node *&root, int data)
 {
     // 1st element che !
-    if (root == NULL)
-    {
+    if (root == NULL){
         root = new Node(data);
         return;
     }
     else
     {
-        if (data > root->data)
-        {
+        if (data > root->data){
             InsertinBst(root->right, data);
         }
-        else
-        {
+        else{
             InsertinBst(root->left, data);
         }
     }
@@ -114,8 +107,7 @@ void createBst(Node *&root)
     int x;
     cin >> x;
 
-    while (x != -1)
-    {
+    while (x != -1){
         InsertinBst(root, x);
         cin >> x;
     }
@@ -233,5 +225,64 @@ BFStraversal(root);
 //pq.empty();
 //min heap ->  priority_queue<int,vector<int>,greater<int> pq ;
 
+
+// gfg -> is a binary tree heap ??
+// class info {
+//     public :
+//     int maxval ;
+//     bool isheap;
+//     info(int a,bool b){
+//         this->maxval=a;
+//         this->isheap=b;
+//     }
+// };
+// info checkifmaxheap(Node* root){
+//     if(root==NULL){
+//     info temp(INT_MIN,true) ;
+//          return temp ;
+//     }
+//     if(root->left ==NULL && root->right==NULL){
+//         info temp(root->data,true) ;
+//         return temp ;
+//     }
+//     info lans = checkifmaxheap(root->left);
+//     info rans = checkifmaxheap(root->right);
+//     if(root->data>=lans.maxval && root->data>=rans.maxval && lans.isheap && rans.isheap){
+//         info ans(root->data,true);
+//         return ans ;
+//     }
+//     else{
+//         info ans (max(root->data,max(lans.maxval,rans.maxval)),false);
+//         return ans ;
+//     }
+// };
+// class Solution {
+//   public:
+//     bool checkifcbt(Node* root) {
+//         if (!root)  return true;
+//         queue<Node*> q;
+//         q.push(root);
+//         bool iscbt=false;
+//         while(!q.empty()){
+//             Node* front  = q.front();
+//             q.pop();
+//             if(front==NULL) iscbt=true;
+//             else{
+//                 if(iscbt) return false;
+//                 q.push(front->left);
+//                 q.push(front->right);
+//             }
+//         }
+//         return true ;
+//     }
+
+//     bool isHeap(struct Node* tree) {
+//         if (!tree) return true; 
+//         bool ans1 = checkifcbt(tree);
+//         if (!ans1) return false;
+//         auto ans2 = checkifmaxheap(tree);
+//         return ans2.isheap;
+//     }
+// };
 
  
