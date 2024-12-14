@@ -1,0 +1,421 @@
+1 -> is Binary tree a heap ? 
+method 1 
+
+// User Function template for C++
+
+// Structure of node
+/*struct Node {
+    int data;
+    Node *left;
+    Node *right;
+
+    Node(int val) {
+        data = val;
+        left = right = NULL;
+    }
+};*/
+class info {
+    public :
+    int maxval ;
+    bool isheap;
+    info(int a,bool b){
+        this->maxval=a;
+        this->isheap=b;
+    }
+};
+info checkifmaxheap(Node* root){
+    if(root==NULL){
+    info temp(INT_MIN,true) ;
+         return temp ;
+    }
+    if(root->left ==NULL && root->right==NULL){
+        info temp(root->data,true) ;
+        return temp ;
+    }
+    info lans = checkifmaxheap(root->left);
+    info rans = checkifmaxheap(root->right);
+    if(root->data>=lans.maxval && root->data>=rans.maxval && lans.isheap && rans.isheap){
+        info ans(root->data,true);
+        return ans ;
+    }
+    else{
+        info ans (max(root->data,max(lans.maxval,rans.maxval)),false);
+        return ans ;
+    }
+};
+class Solution {
+  public:
+    bool checkifcbt(Node* root) {
+        if (!root)  return true;
+        queue<Node*> q;
+        q.push(root);
+        bool iscbt=false;
+        while(!q.empty()){
+            Node* front  = q.front();
+            q.pop();
+            if(front==NULL) iscbt=true;
+            else{
+                if(iscbt) return false;
+                q.push(front->left);
+                q.push(front->right);
+            }
+        }
+        return true ;
+    }
+
+    bool isHeap(struct Node* tree) {
+        if (!tree) return true; // Handle empty tree case
+        bool ans1 = checkifcbt(tree);
+        if (!ans1) return false;
+        auto ans2 = checkifmaxheap(tree); // Assuming this is implemented elsewhere
+        return ans2.isheap;
+    }
+};
+
+
+method 2->
+class Solution {
+  public:
+    bool checkheap(Node* root){
+        if(!root) return true;
+        bool result  = true ;
+        bool left=true,right=true;
+        if(root->left) left=(root->data>root->left->data);
+        if(root->right)right=(root->data>root->right->data);
+        return result&&left&&right&&checkheap(root->left)&&checkheap(root->right);
+        
+    }
+    bool checkifcbt(Node* root) {
+        if (!root)  return true;
+        queue<Node*> q;
+        q.push(root);
+        bool iscbt=false;
+        while(!q.empty()){
+            Node* front  = q.front();
+            q.pop();
+            if(front==NULL) iscbt=true;
+            else{
+                if(iscbt) return false;
+                q.push(front->left);
+                q.push(front->right);
+            }
+        }
+        return true ;
+    }
+
+    bool isHeap(struct Node* tree) {
+        if (!tree) return true; 
+        bool ans1 = checkifcbt(tree);
+        if (!ans1) return false;
+        //auto ans2 = checkifmaxheap(tree);
+        auto ans2 = checkheap(tree);
+        return ans2;
+        //return ans2.isheap;
+    }
+};
+
+
+method 3 -> 
+
+
+class Solution {
+  public:
+    int nodecount(Node* root){
+        if(!root) return 0 ;
+        return 1+nodecount(root->left)+nodecount(root->right);
+    }
+    
+    bool isCbt(Node* root,int i,int &n){
+        if(!root) return true ;
+        if(i>n) return false;
+        return isCbt(root->left,2*i,n)&&isCbt(root->left,2*i+1,n);
+    }
+    bool isMaxOrder(Node* root){
+        if(!root)return true ;
+        bool result = true ;
+        bool left=true,right=true;
+        if(root->left) left=root->data>root->left->data;
+        if(root->right) right=root->data>root->right->data;
+        
+        return (left&&right&&isMaxOrder(root->left)&&isMaxOrder(root->right));
+    }
+    bool checkheap(Node* root){
+        if(!root) return true;
+        bool result  = true ;
+        bool left=true,right=true;
+        if(root->left) left=(root->data>root->left->data);
+        if(root->right)right=(root->data>root->right->data);
+        return result&&left&&right&&checkheap(root->left)&&checkheap(root->right);
+        
+    }
+    bool checkifcbt(Node* root) {
+        if (!root)  return true;
+        queue<Node*> q;
+        q.push(root);
+        bool iscbt=false;
+        while(!q.empty()){
+            Node* front  = q.front();
+            q.pop();
+            if(front==NULL) iscbt=true;
+            else{
+                if(iscbt) return false;
+                q.push(front->left);
+                q.push(front->right);
+            }
+        }
+        return true ;
+    }
+
+    bool isHeap(struct Node* tree) {
+        // if (!tree) return true; 
+        // bool ans1 = checkifcbt(tree);
+        // if (!ans1) return false;
+        // //auto ans2 = checkifmaxheap(tree);
+        // auto ans2 = checkheap(tree);
+        // return ans2;
+        // //return ans2.isheap;
+        
+        int n= nodecount(tree);
+        int i=1;
+        return isCbt(tree,i,n) && isMaxOrder(tree);
+    }
+};
+
+
+
+2 -> merge two binary maxheaps.
+
+class Solution {
+public:
+    void heapify(vector<int>& c, int i, int size) {
+        int large = i;
+        int left = (2 * i) + 1, right = (2 * i) + 2;
+        
+        if (left < size && c[left] > c[large]) 
+            large = left;
+        
+        if (right < size && c[right] > c[large]) 
+            large = right;
+        
+        if (large != i) {
+            swap(c[large], c[i]);
+            heapify(c, large, size); 
+        }
+    }
+
+    vector<int> mergeHeaps(vector<int>& a, vector<int>& b, int n, int m) {
+        vector<int> c(a.begin(), a.end());
+        c.insert(c.end(), b.begin(), b.end()); // Merge both arrays
+
+        int size = n + m;
+        
+        for (int i = (size / 2) - 1; i >= 0; i--) {
+            heapify(c, i, size);
+        }
+        
+        return c;
+    }
+};
+
+
+3 -> k closest pts to origin.
+
+class Solution {
+public:
+    vector<vector<int>> kClosest(vector<vector<int>>& points, int k) {
+        vector<vector<int>>ans ;
+        priority_queue<pair<double,int>,vector<pair<double,int>>,greater<pair<double,int>>>pq;
+        for(int i=0;i<points.size();i++){
+            pq.push({sqrt((points[i][0]*points[i][0])+(points[i][1]*points[i][1])),i});
+        }
+        while(k--){
+            ans.push_back(points[pq.top().second]);
+            pq.pop();
+        }
+        return ans ;
+    }
+};
+
+4 -> largest 3 rhombus sum.
+
+class Solution {
+public:
+    void populatePriorityQueue(vector<vector<int>>& grid, int i, int j, int n, int m, priority_queue<int>& pq) {
+        int open = 1;
+        while (j + open < m && j - open >= 0 && i + open < n && i - open >= 0) {
+            int row = i - open;
+            int col = j;
+            int sum =0 ;
+            while (row != i && col != j - open) sum+=(grid[row][col]), row++, col--;
+            while (row != i + open && col != j) sum+=(grid[row][col]), row++, col++;
+            while (row != i && col != j + open) sum+=(grid[row][col]), row--, col++;
+            while (row != i - open && col !=j) sum+=(grid[row][col]), row--, col--;
+            pq.push(sum);
+            open++;
+        }
+    }
+    vector<int> getBiggestThree(vector<vector<int>>& grid) {
+        priority_queue<int> pq;
+        int n = grid.size(), m = grid[0].size();
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                pq.push(grid[i][j]);
+                populatePriorityQueue(grid, i, j, n, m, pq);
+            }
+        }
+        set<int> ans;
+        int k = 3;
+        int currsize=0;
+        while (k && pq.size() > 0) {
+            ans.insert(pq.top());
+            if(currsize<ans.size()){
+                k--;
+                currsize=ans.size();
+            }
+            pq.pop();
+            
+        }
+        vector<int> a(ans.begin(), ans.end());
+        sort(a.rbegin(), a.rend());
+        return a;
+    }
+};
+
+
+5 -> 2163. Minimum Difference in Sums After Removal of Elements.
+
+#define  ll   long long
+class Solution {
+public:
+    long long minimumDifference(vector<int>& nums) {
+        long long ans=LONG_LONG_MAX;
+        int n=nums.size()/3;
+        vector<ll>prefix(nums.size(),-1),suffix(nums.size(),-1);
+        priority_queue<ll>pq;
+        priority_queue<ll,vector<ll>,greater<ll>>pq2;
+        ll sum=0;
+        for(int i=0;i<nums.size();i++){
+            sum+=nums[i];
+            pq.push(nums[i]);
+            if(pq.size()>n){
+                sum-=pq.top();
+                pq.pop();
+                
+            }
+            if(pq.size()==n) {
+                prefix[i]=sum;
+            }
+        }
+        sum=0;
+        for(int i=nums.size()-1;i>=0;i--){
+            sum+=nums[i];
+            pq2.push(nums[i]);
+            if(pq2.size()>n){
+                sum-=pq2.top();
+                pq2.pop();
+            }
+            if(pq2.size()==n){
+                suffix[i]=sum;
+            }
+        }
+        for(int i=0;i<nums.size()-1;i++){
+            if(prefix[i]!=-1 && suffix[i+1]!=-1){
+                ans = min(ans,prefix[i]-suffix[i+1]);
+            }
+        }
+        return ans ;
+    }
+};
+
+
+6-> 871 minimum fuel stops 
+
+--->by heap<----
+
+class Solution {
+public:
+    int minRefuelStops(int target, long long startFuel, vector<vector<int>>& s) {
+       // sort(s.begin(),s.end());
+        priority_queue<pair<int,int>> pq;
+        int curfuel=startFuel,curdist=0;
+        int i=0;
+        int ans=0;
+        while(true){
+            while(i<s.size()){
+                if(s[i][0]<=curfuel+curdist){
+                    pq.push({s[i][1],s[i][0]});
+                }
+                else break;
+                i++;
+            }
+            curdist+=curfuel;
+            curfuel=0;
+            if(curdist>=target) break;
+            if(pq.empty()) {
+                ans=-1; break;
+            }
+            pair<int,int> top = pq.top();
+            curfuel=(curdist-top.second)+top.first;
+            curdist=(top.second);
+            pq.pop();
+            ans++;
+        }
+        return ans ;
+    }
+};
+
+
+---->by Dp<----
+
+---
+
+
+2762 - extra qtn combination of min max heap 
+class Solution {
+public:
+    long long continuousSubarrays(vector<int>& nums) {
+        long long ans = 0;
+        priority_queue<pair<int,int>>maxheap;
+        priority_queue<pair<int,int>,vector<pair<int,int>>,greater<pair<int,int>>>minheap;
+        int i=0;
+        int j=0;
+        while(j<nums.size()){
+            minheap.push({nums[j],j});
+            maxheap.push({nums[j],j});
+            while(maxheap.top().first-minheap.top().first>2){
+                i++;
+                while(maxheap.top().second<i) maxheap.pop();
+                while(minheap.top().second<i) minheap.pop();
+            }
+            ans+=(j-i+1);
+            j++;
+        }
+        return ans ;
+    }
+};
+
+
+
+239 sliding window maximum 
+
+class Solution {
+public:
+    vector<int> maxSlidingWindow(vector<int>& nums, int k) {
+        vector<int>ans ;
+        priority_queue<pair<int,int>>pq;
+        for(int i=0;i<k;i++) pq.push({nums[i],i});
+
+        ans.push_back(pq.top().first);
+        for(int i=1;i<=nums.size()-k;i++){
+            
+            while(!pq.empty() && pq.top().second<i){
+                pq.pop();
+            }
+            
+            pq.push({nums[i+k-1],i+k-1});
+            ans.push_back(pq.top().first);
+            
+        }
+        return ans;
+    }
+};
